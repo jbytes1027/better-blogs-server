@@ -4,6 +4,16 @@ const totalLikes = (blogs) => (
   ), 0)
 )
 
+const mostLiked = (blogs) => {
+  let mostLiked
+  for (const blog of blogs) {
+    if (mostLiked === undefined || blog.likes > mostLiked.likes) {
+      mostLiked = blog
+    }
+  }
+  return mostLiked
+}
+
 module.exports = {
-  dummy, totalLikes
+  totalLikes, mostLiked
 }
