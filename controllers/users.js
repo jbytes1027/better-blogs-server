@@ -29,7 +29,7 @@ userRouter.post('/', async (req, res, next) => {
     }
 
     let allUsers = await User.find({})
-    allUsers = allUsers.map((user) => user.toJSON())
+      .then(result => result.map((user) => user.toJSON()))
 
     const foundUser = allUsers.find((user) => (
       user !== null && user.username === username
