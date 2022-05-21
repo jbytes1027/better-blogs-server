@@ -2,16 +2,46 @@ const bcrypt = require('bcrypt')
 const userRouter = require('express').Router()
 const User = require('../models/user')
 
-// TODO fix getter
-userRouter.get('/', async (req, res) => {
-  console.log('get1')
+class UserCreationException extends Error {
+  constructor(msg) {
+    super()
+    this.message = msg
+    this.name = 'UserCreationException'
+  }
+
+}
+
+userRouter.get('/', async (req, res, next) => {
   const users = await User.find({})
-  console.log(users)
   res.json(users)
 })
 
-userRouter.post('/', async (req, res) => {
+userRouter.post('/', async (req, res, next) => {
   const { username, name, password } = req.body
+
+  try {
+    if (!username || username.length < 3) {
+      throw new UserCreationException('Username missing or too short')
+    }
+
+    if (!password || password.length < 3) {
+      throw new UserCreationException('Password missing or too short')
+    }
+
+    let allUsers = await User.find({})
+    allUsers = allUsers.map((user) => user.toJSON())
+
+    const foundUser = allUsers.find((user) => (
+      user !== null && user.username === username
+    ))
+
+    if (foundUser) {
+      throw new UserCreationException('User already exists')
+    }
+  } catch (e) {
+    next(e)
+    return
+  }
 
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(password, saltRounds)
