@@ -1,23 +1,46 @@
 const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const jwt = require('jsonwebtoken')
 
-blogRouter.get('/', async (request, response) => {
+class InvalidTokenException extends Error {
+  constructor() {
+    super()
+    this.message = 'Invalid Token'
+    this.name = 'InvalidTokenException'
+  }
+}
+
+const decodeTokenFrom = (req) => {
+  const authorization = req.get('authorization')
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    const token = authorization.substring(7)
+    return jwt.verify(token, process.env.SECRET)
+  } else {
+    return null
+  }
+}
+
+blogRouter.get('/', async (request, response, next) => {
   const blogs = await Blog.find({}).populate('user', { username: true, name: true })
   response.json(blogs)
 })
 
-blogRouter.post('/', async (request, response) => {
+blogRouter.post('/', async (request, response, next) => {
   const body = request.body
-  const creatorId = await User.findOne({}) // temp
-  const userCreator = await User.findById(creatorId)
+  const token = decodeTokenFrom(request)
+  if (!token || !token.id) {
+    next(new InvalidTokenException())
+    return
+  }
+  const userCreator = await User.findById(token.id)
 
   const blog = new Blog({
     content: body.content,
     author: body.author,
     url: body.url,
     likes: body.likes,
-    user: creatorId,
+    user: userCreator._id,
   })
 
   const savedBlog = await blog.save()
