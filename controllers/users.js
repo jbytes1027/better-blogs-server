@@ -8,11 +8,11 @@ class UserCreationException extends Error {
     this.message = msg
     this.name = 'UserCreationException'
   }
-
 }
 
 userRouter.get('/', async (req, res, next) => {
-  const users = await User.find({})
+  const users = await User.find({}).populate('blogs', { author: true, url: true, likes: true })
+
   res.json(users)
 })
 
