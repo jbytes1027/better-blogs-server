@@ -16,8 +16,12 @@ loginRouter.post('/', async (req, res, next) => {
   const user = await User.findOne({ username })
 
   try {
+    if (!user) {
+      throw new LoginException('Bad Credentials')
+    }
+
     const isPasswordCorrect = await bcrypt.compare(password, user.passwordHash)
-    if (!user || !isPasswordCorrect) {
+    if (!isPasswordCorrect) {
       throw new LoginException('Bad Credentials')
     }
   } catch (e) {
