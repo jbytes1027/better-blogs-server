@@ -31,9 +31,7 @@ blogRouter.post('/', middleware.userExtractor, async (request, response, next) =
 blogRouter.delete('/:id', async (req, res) => {
   const id = req.params.id
 
-  Blog.findByIdAndDelete(id)
-
-  console.log()
+  const deleted = await Blog.findByIdAndDelete(id)
 
   res.status(204).end()
 })
