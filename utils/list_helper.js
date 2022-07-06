@@ -1,8 +1,5 @@
-const totalLikes = (blogs) => (
-  sum = blogs.reduce((prev, blog) => (
-    prev + blog.likes
-  ), 0)
-)
+const totalLikes = (blogs) =>
+  (sum = blogs.reduce((prev, blog) => prev + blog.likes, 0))
 
 const mostLiked = (blogs) => {
   let mostLiked
@@ -15,5 +12,6 @@ const mostLiked = (blogs) => {
 }
 
 module.exports = {
-  totalLikes, mostLiked
+  totalLikes,
+  mostLiked,
 }

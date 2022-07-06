@@ -1,28 +1,28 @@
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcrypt')
-const loginRouter = require('express').Router()
-const User = require('../models/user')
+const jwt = require("jsonwebtoken")
+const bcrypt = require("bcrypt")
+const loginRouter = require("express").Router()
+const User = require("../models/user")
 
 class LoginException extends Error {
   constructor(msg) {
     super()
     this.message = msg
-    this.name = 'LoginException'
+    this.name = "LoginException"
   }
 }
 
-loginRouter.post('/', async (req, res, next) => {
+loginRouter.post("/", async (req, res, next) => {
   const { username, password } = req.body
   const user = await User.findOne({ username })
 
   try {
     if (!user) {
-      throw new LoginException('Bad Credentials')
+      throw new LoginException("Bad Credentials")
     }
 
     const isPasswordCorrect = await bcrypt.compare(password, user.passwordHash)
     if (!isPasswordCorrect) {
-      throw new LoginException('Bad Credentials')
+      throw new LoginException("Bad Credentials")
     }
   } catch (e) {
     next(e)
@@ -31,7 +31,7 @@ loginRouter.post('/', async (req, res, next) => {
 
   const userInfo = {
     username: user.username,
-    id: user._id
+    id: user._id,
   }
 
   const token = jwt.sign(userInfo, process.env.SECRET)

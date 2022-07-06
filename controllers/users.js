@@ -1,42 +1,47 @@
-const bcrypt = require('bcrypt')
-const userRouter = require('express').Router()
-const User = require('../models/user')
+const bcrypt = require("bcrypt")
+const userRouter = require("express").Router()
+const User = require("../models/user")
 
 class UserCreationException extends Error {
   constructor(msg) {
     super()
     this.message = msg
-    this.name = 'UserCreationException'
+    this.name = "UserCreationException"
   }
 }
 
-userRouter.get('/', async (req, res, next) => {
-  const users = await User.find({}).populate('blogs', { author: true, url: true, likes: true })
+userRouter.get("/", async (req, res, next) => {
+  const users = await User.find({}).populate("blogs", {
+    author: true,
+    url: true,
+    likes: true,
+  })
 
   res.json(users)
 })
 
-userRouter.post('/', async (req, res, next) => {
+userRouter.post("/", async (req, res, next) => {
   const { username, name, password } = req.body
 
   try {
     if (!username || username.length < 3) {
-      throw new UserCreationException('Username missing or too short')
+      throw new UserCreationException("Username missing or too short")
     }
 
     if (!password || password.length < 3) {
-      throw new UserCreationException('Password missing or too short')
+      throw new UserCreationException("Password missing or too short")
     }
 
-    let allUsers = await User.find({})
-      .then(result => result.map((user) => user.toJSON()))
+    let allUsers = await User.find({}).then((result) =>
+      result.map((user) => user.toJSON())
+    )
 
-    const foundUser = allUsers.find((user) => (
-      user !== null && user.username === username
-    ))
+    const foundUser = allUsers.find(
+      (user) => user !== null && user.username === username
+    )
 
     if (foundUser) {
-      throw new UserCreationException('User already exists')
+      throw new UserCreationException("User already exists")
     }
   } catch (e) {
     next(e)
