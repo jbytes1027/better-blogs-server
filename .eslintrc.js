@@ -6,21 +6,12 @@ module.exports = {
     node: true,
     jest: true,
   },
-  extends: [
-    'plugin:react/recommended',
-  ],
+  extends: ["prettier"],
   parserOptions: {
-    ecmaFeatures: {
-      jsx: true,
-    },
-    ecmaVersion: 'latest',
+    ecmaVersion: "latest",
   },
-  plugins: [
-    'react',
-  ],
   rules: {
-    semi: [2, 'never'],
-    'no-param-reassign': 0,
-    'no-underscore-dangle': 0,
+    "no-param-reassign": 0,
+    "no-underscore-dangle": 0,
   },
 }
