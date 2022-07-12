@@ -20,7 +20,7 @@ DELETE http://localhost:3001/api/blogs/6282dc9b772532642658c9ad
 ###
 
 
-PUT http://localhost:3001/api/blogs/62cc330fc975a9b13e6e29f9
+PUT http://localhost:3001/api/blogs/62cd840e07651ce2654579b5
 Content-Type: application/json
 
 {
