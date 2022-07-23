@@ -1,5 +1,5 @@
 {
-  "name": "fso-blog",
+  "name": "fso-post",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,11 +7,12 @@
     "start": "NODE_ENV=production node index.js",
     "test": "NODE_ENV=test jest --verbose --forceExit",
     "dev": "NODE_ENV=development nodemon index.js",
-    "lint": "npx prettier --loglevel=warn --write . && npx eslint . --fix && echo 'Linting Complete.'"
+    "code:check": "npx prettier --loglevel=warn --check . && npx eslint . && echo 'Check Complete.'",
+    "code:fix": "npx prettier --loglevel=warn --write . && npx eslint . --fix && echo 'Fix Complete.'"
   },
   "repository": {
     "type": "git",
-    "url": "fso-blog"
+    "url": "fso-post"
   },
   "author": "",
   "license": "ISC",

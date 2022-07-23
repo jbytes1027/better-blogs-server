@@ -1,11 +1,10 @@
-const totalLikes = (blogs) =>
-  (sum = blogs.reduce((prev, blog) => prev + blog.likes, 0))
+const totalLikes = (posts) => posts.reduce((prev, post) => prev + post.likes, 0)
 
-const mostLiked = (blogs) => {
+const mostLiked = (posts) => {
   let mostLiked
-  for (const blog of blogs) {
-    if (mostLiked === undefined || blog.likes > mostLiked.likes) {
-      mostLiked = blog
+  for (const post of posts) {
+    if (mostLiked === undefined || post.likes > mostLiked.likes) {
+      mostLiked = post
     }
   }
   return mostLiked

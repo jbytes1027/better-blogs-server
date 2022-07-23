@@ -3,11 +3,10 @@ const mongoose = require("mongoose")
 const userSchema = new mongoose.Schema({
   username: String,
   passwordHash: String,
-  name: String,
-  blogs: [
+  posts: [
     {
       type: mongoose.ObjectId,
-      ref: "Blog",
+      ref: "Post",
     },
   ],
 })

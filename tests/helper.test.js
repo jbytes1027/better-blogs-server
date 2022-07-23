@@ -1,7 +1,7 @@
 const listHelper = require("../utils/list_helper")
 
 describe("total likes", () => {
-  const listWithOneBlog = [
+  const listWithOnePost = [
     {
       _id: "5a422aa71b54a676234d17f8",
       title: "Go To Statement Considered Harmful",
@@ -12,14 +12,14 @@ describe("total likes", () => {
     },
   ]
 
-  test("when list has only one blog, equals the likes of that", () => {
-    const result = listHelper.totalLikes(listWithOneBlog)
+  test("when list has only one post, equals the likes of that", () => {
+    const result = listHelper.totalLikes(listWithOnePost)
     expect(result).toBe(5)
   })
 })
 
 test("most liked", () => {
-  const blogs = [
+  const posts = [
     {
       _id: "5a422a851b54a676234d17f7",
       title: "React patterns",
@@ -48,7 +48,7 @@ test("most liked", () => {
       _id: "5a422b891b54a676234d17fa",
       title: "First class tests",
       author: "Robert C. Martin",
-      url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
+      url: "http://post.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
       likes: 10,
       __v: 0,
     },
@@ -56,7 +56,7 @@ test("most liked", () => {
       _id: "5a422ba71b54a676234d17fb",
       title: "TDD harms architecture",
       author: "Robert C. Martin",
-      url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
+      url: "http://post.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
       likes: 0,
       __v: 0,
     },
@@ -64,13 +64,13 @@ test("most liked", () => {
       _id: "5a422bc61b54a676234d17fc",
       title: "Type wars",
       author: "Robert C. Martin",
-      url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
+      url: "http://post.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
       likes: 2,
       __v: 0,
     },
   ]
-  const expected = blogs[2]
-  const result = listHelper.mostLiked(blogs)
+  const expected = posts[2]
+  const result = listHelper.mostLiked(posts)
 
   expect(result).toEqual(expected)
 })

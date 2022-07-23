@@ -10,8 +10,8 @@ class UserCreationException extends Error {
   }
 }
 
-userRouter.get("/:id", async (req, res, next) => {
-  const user = await User.findById(req.params.id).populate("blogs", {
+userRouter.get("/:id", async (req, res) => {
+  const user = await User.findById(req.params.id).populate("posts", {
     title: true,
     author: true,
     url: true,
@@ -21,8 +21,8 @@ userRouter.get("/:id", async (req, res, next) => {
   res.json(user)
 })
 
-userRouter.get("/", async (req, res, next) => {
-  const users = await User.find({}).populate("blogs", {
+userRouter.get("/", async (req, res) => {
+  const users = await User.find({}).populate("posts", {
     title: true,
     author: true,
     url: true,
