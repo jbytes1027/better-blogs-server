@@ -12,6 +12,8 @@ postRouter.get("/", async (request, response) => {
 
 postRouter.post("/", middleware.userExtractor, async (request, response) => {
   const body = request.body
+  const timeStamp = new Date()
+  console.log(timeStamp.toISOString())
 
   const post = new Post({
     title: body.title,
@@ -20,6 +22,7 @@ postRouter.post("/", middleware.userExtractor, async (request, response) => {
     url: body.url,
     likes: body.likes,
     user: request.userId,
+    time: timeStamp.toISOString(),
   })
 
   const savedPost = await post.save()

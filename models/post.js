@@ -5,6 +5,7 @@ const postSchema = new mongoose.Schema({
   author: String,
   url: String,
   likes: Number,
+  time: String,
   user: {
     type: mongoose.ObjectId,
     ref: "User",
