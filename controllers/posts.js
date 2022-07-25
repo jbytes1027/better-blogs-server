@@ -13,7 +13,6 @@ postRouter.get("/", async (request, response) => {
 postRouter.post("/", middleware.userExtractor, async (request, response) => {
   const body = request.body
   const timeStamp = new Date()
-  console.log(timeStamp.toISOString())
 
   const post = new Post({
     title: body.title,
@@ -23,6 +22,7 @@ postRouter.post("/", middleware.userExtractor, async (request, response) => {
     likes: body.likes,
     user: request.userId,
     time: timeStamp.toISOString(),
+    comments: []
   })
 
   const savedPost = await post.save()
@@ -54,6 +54,25 @@ postRouter.put("/:id", async (req, res) => {
   }
 
   const newPostResponse = await Post.findByIdAndUpdate(req.params.id, newPost, {
+    new: true,
+  }).populate("user", {
+    username: true,
+    name: true,
+  })
+
+  if (!newPostResponse) {
+    res.status(404).end()
+  } else {
+    res.json(newPostResponse)
+  }
+})
+
+postRouter.post("/:id/comments", async (req, res) => {
+  console.log(req.body.message)
+
+  const newPostResponse = await Post.findByIdAndUpdate(req.params.id, {
+    $push: { comments: req.body.message }
+  }, {
     new: true,
   }).populate("user", {
     username: true,

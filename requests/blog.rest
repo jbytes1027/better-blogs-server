@@ -7,20 +7,30 @@ Content-Type: application/json
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBsYXllcjEiLCJpZCI6IjYyOGJmOTFmZGI5Y2IwNTJiYjI4Y2UyNyIsImlhdCI6MTY1MzQwNzEwMH0.Bou6yXx2ywl0AMo7kjaQBIaJSZDlG_khU7HAUpz3Ong
 
 {
-    "title": "the title",
-    "author": "creator",
-    "url": "the url",
-    "likes": 3
+    "title": "React patterns",
+    "author": "Michael Chan",
+    "url": "https://reactpatterns.com/",
+    "likes": 7
 }
 
 ###
 
-DELETE http://localhost:3001/api/posts/6282dc9b772532642658c9ad
+POST http://localhost:3001/api/posts/62deb3a471bc633a986ebedf/comments
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBsYXllcjEiLCJpZCI6IjYyOGJmOTFmZGI5Y2IwNTJiYjI4Y2UyNyIsImlhdCI6MTY1MzQwNzEwMH0.Bou6yXx2ywl0AMo7kjaQBIaJSZDlG_khU7HAUpz3Ong
+
+{
+    "message": "this is a comment."
+}
+
+###
+
+DELETE http://localhost:3001/api/posts/62cd840e07651ce2654579b5
 
 ###
 
 
-PUT http://localhost:3001/api/posts/62cd840e07651ce2654579b5
+PUT http://localhost:3001/api/posts/62dea7e2588e6c91c9450b50
 Content-Type: application/json
 
 {

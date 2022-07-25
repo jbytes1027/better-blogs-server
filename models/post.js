@@ -10,6 +10,7 @@ const postSchema = new mongoose.Schema({
     type: mongoose.ObjectId,
     ref: "User",
   },
+  comments: [String],
 })
 
 postSchema.set("toJSON", {
