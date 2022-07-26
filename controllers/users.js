@@ -65,7 +65,6 @@ userRouter.post("/", async (req, res, next) => {
 
   const newUser = new User({
     username,
-    name,
     passwordHash,
   })
 

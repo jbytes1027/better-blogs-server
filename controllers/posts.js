@@ -5,7 +5,6 @@ const middleware = require("../utils/middleware")
 postRouter.get("/", async (request, response) => {
   const posts = await Post.find({}).populate("user", {
     username: true,
-    name: true,
   })
   response.json(posts)
 })
@@ -28,7 +27,6 @@ postRouter.post("/", middleware.userExtractor, async (request, response) => {
   const savedPost = await post.save()
   const populatedPost = await Post.findById(savedPost._id).populate("user", {
     username: true,
-    name: true,
   })
 
   request.user.posts = request.user.posts.concat(savedPost._id)
@@ -57,7 +55,6 @@ postRouter.put("/:id", async (req, res) => {
     new: true,
   }).populate("user", {
     username: true,
-    name: true,
   })
 
   if (!newPostResponse) {
@@ -76,7 +73,6 @@ postRouter.post("/:id/comments", async (req, res) => {
     new: true,
   }).populate("user", {
     username: true,
-    name: true,
   })
 
   if (!newPostResponse) {
