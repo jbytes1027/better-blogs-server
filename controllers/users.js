@@ -33,7 +33,7 @@ userRouter.get("/", async (req, res) => {
 })
 
 userRouter.post("/", async (req, res, next) => {
-  const { username, name, password } = req.body
+  const { username, password } = req.body
 
   try {
     if (!username || username.length < 3) {
