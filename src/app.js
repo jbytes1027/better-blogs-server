@@ -1,4 +1,4 @@
-require('express-async-errors')
+require("express-async-errors")
 const express = require("express")
 const cors = require("cors")
 const mongoose = require("mongoose")
@@ -8,7 +8,6 @@ const loginRouter = require("./controllers/login")
 const middleware = require("./utils/middleware")
 const logger = require("./utils/logger")
 const config = require("./utils/config")
-
 
 const app = express()
 

@@ -20,7 +20,7 @@ postRouter.post("/", middleware.userExtractor, async (request, response) => {
     likes: body.likes,
     user: request.userId,
     time: timeStamp.toISOString(),
-    comments: []
+    comments: [],
   })
 
   const savedPost = await post.save()
@@ -64,11 +64,15 @@ postRouter.put("/:id", async (req, res) => {
 })
 
 postRouter.post("/:id/comments", async (req, res) => {
-  const newPostResponse = await Post.findByIdAndUpdate(req.params.id, {
-    $push: { comments: req.body.message }
-  }, {
-    new: true,
-  }).populate("user", {
+  const newPostResponse = await Post.findByIdAndUpdate(
+    req.params.id,
+    {
+      $push: { comments: req.body.message },
+    },
+    {
+      new: true,
+    }
+  ).populate("user", {
     username: true,
   })
 

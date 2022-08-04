@@ -1,26 +1,26 @@
 const mongoose = require("mongoose")
-const User = require('./user')
+const User = require("./user")
 
 const postSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true
+    required: true,
   },
   author: {
     type: String,
-    required: true
+    required: true,
   },
   url: {
     type: String,
-    required: true
+    required: true,
   },
   likes: {
     type: Number,
-    required: true
+    required: true,
   },
   time: {
     type: String,
-    required: true
+    required: true,
   },
   user: {
     type: mongoose.ObjectId,
@@ -30,12 +30,12 @@ const postSchema = new mongoose.Schema({
       validator: async (u) => {
         return await User.exists({ _id: u })
       },
-    }
+    },
   },
   comments: {
     type: [String],
     required: true,
-  }
+  },
 })
 
 postSchema.set("toJSON", {
