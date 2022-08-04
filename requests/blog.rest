@@ -25,7 +25,7 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBsY
 
 ###
 
-DELETE http://localhost:3001/api/posts/62cd840e07651ce2654579b5
+DELETE http://localhost:3001/api/posts/62ebf6e5cd603db6bf61c87d
 
 ###
 
