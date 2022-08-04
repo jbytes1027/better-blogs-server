@@ -64,8 +64,6 @@ postRouter.put("/:id", async (req, res) => {
 })
 
 postRouter.post("/:id/comments", async (req, res) => {
-  console.log(req.body.message)
-
   const newPostResponse = await Post.findByIdAndUpdate(req.params.id, {
     $push: { comments: req.body.message }
   }, {
