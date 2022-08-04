@@ -35,30 +35,21 @@ userRouter.get("/", async (req, res) => {
 userRouter.post("/", async (req, res, next) => {
   const { username, password } = req.body
 
-  try {
-    if (!username || username.length < 3) {
-      throw new UserCreationException("Username missing or too short")
-    }
+  if (!username || username.length < 3)
+    return next(new UserCreationException("Username missing or too short"))
 
-    if (!password || password.length < 3) {
-      throw new UserCreationException("Password missing or too short")
-    }
+  if (!password || password.length < 3)
+    return next(new UserCreationException("Password missing or too short"))
 
-    let allUsers = await User.find({}).then((result) =>
-      result.map((user) => user.toJSON())
-    )
+  let allUsers = await User.find({}).then((result) =>
+    result.map((user) => user.toJSON())
+  )
 
-    const foundUser = allUsers.find(
-      (user) => user !== null && user.username === username
-    )
+  const foundUser = allUsers.find(
+    (user) => user !== null && user.username === username
+  )
 
-    if (foundUser) {
-      throw new UserCreationException("User already exists")
-    }
-  } catch (e) {
-    next(e)
-    return
-  }
+  if (foundUser) return next(new UserCreationException("User already exists"))
 
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(password, saltRounds)

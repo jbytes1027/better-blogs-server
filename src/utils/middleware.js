@@ -22,26 +22,20 @@ const unknownEndpoint = (request, response) => {
 const userExtractor = async (req, res, next) => {
   const authorization = req.get("authorization")
 
-  try {
-    if (!(authorization && authorization.toLowerCase().startsWith("bearer "))) {
-      throw new InvalidTokenException()
-    }
-    const token = authorization.substring(7)
+  if (!(authorization && authorization.toLowerCase().startsWith("bearer ")))
+    return next(new InvalidTokenException())
 
-    const tokenPayload = jwt.verify(token, process.env.SECRET)
+  const token = authorization.substring(7)
 
-    if (!tokenPayload || !tokenPayload.id) {
-      throw new InvalidTokenException()
-    }
+  const tokenPayload = jwt.verify(token, process.env.SECRET)
 
-    req.userId = tokenPayload.id
-    req.user = await User.findById(tokenPayload.id)
+  if (!tokenPayload || !tokenPayload.id)
+    return next(new InvalidTokenException())
 
-    next()
-  } catch (e) {
-    next(e)
-    return
-  }
+  req.userId = tokenPayload.id
+  req.user = await User.findById(tokenPayload.id)
+
+  next()
 }
 
 const errorHandler = (error, request, response, next) => {

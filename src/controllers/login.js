@@ -15,17 +15,9 @@ loginRouter.post("/", async (req, res, next) => {
   const { username, password } = req.body
   const user = await User.findOne({ username })
 
-  try {
-    if (!user) {
-      throw new LoginException("Invalid username")
-    }
-    const isPasswordCorrect = await bcrypt.compare(password, user.passwordHash)
-    if (!isPasswordCorrect) {
-      throw new LoginException("Invalid password")
-    }
-  } catch (e) {
-    return next(e)
-  }
+  if (!user) return next(new LoginException("Invalid username"))
+  const isPasswordCorrect = await bcrypt.compare(password, user.passwordHash)
+  if (!isPasswordCorrect) return next(new LoginException("Invalid password"))
 
   const userInfo = {
     username: user.username,
