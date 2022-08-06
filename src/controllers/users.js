@@ -1,14 +1,7 @@
 const bcrypt = require("bcrypt")
 const userRouter = require("express").Router()
 const User = require("../models/user")
-
-class UserCreationException extends Error {
-  constructor(msg) {
-    super()
-    this.message = msg
-    this.name = "UserCreationException"
-  }
-}
+const { DuplicateResourceError, RequestError } = require("../utils/errors")
 
 userRouter.get("/:id", async (req, res) => {
   const user = await User.findById(req.params.id).populate("posts", {
@@ -36,10 +29,10 @@ userRouter.post("/", async (req, res, next) => {
   const { username, password } = req.body
 
   if (!username || username.length < 3)
-    return next(new UserCreationException("Username missing or too short"))
+    return next(new RequestError("Username missing or too short"))
 
   if (!password || password.length < 3)
-    return next(new UserCreationException("Password missing or too short"))
+    return next(new RequestError("Password missing or too short"))
 
   let allUsers = await User.find({}).then((result) =>
     result.map((user) => user.toJSON())
@@ -49,7 +42,7 @@ userRouter.post("/", async (req, res, next) => {
     (user) => user !== null && user.username === username
   )
 
-  if (foundUser) return next(new UserCreationException("User already exists"))
+  if (foundUser) return next(new DuplicateResourceError())
 
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(password, saltRounds)

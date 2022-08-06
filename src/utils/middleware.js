@@ -41,17 +41,7 @@ const userExtractor = async (req, res, next) => {
 const errorHandler = (error, request, response, next) => {
   logger.error(error.message)
 
-  if (error.name === "CastError") {
-    response.status(400).json({ error: "malformatted id" })
-  } else if (error.name === "ValidationError") {
-    response.status(400).json({ error: error.message })
-  } else if (error.name === "UserCreationException") {
-    response.status(400).json({ error: error.message })
-  } else if (error.name === "LoginException") {
-    response.status(401).json({ error: error.message })
-  } else if (error.name === "InvalidTokenException") {
-    response.status(401).json({ error: error.message })
-  }
+  response.status(error.statusCode).json({ error: error.message })
 
   next(error)
 }
