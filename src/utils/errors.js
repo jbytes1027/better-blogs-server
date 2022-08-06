@@ -19,8 +19,15 @@ class AuthenticationError extends RequestError {
   }
 }
 
+class NotFoundError extends RequestError {
+  constructor() {
+    super("Unknown endpoint", 404)
+  }
+}
+
 module.exports = {
   DuplicateResourceError,
   AuthenticationError,
   RequestError,
+  NotFoundError,
 }

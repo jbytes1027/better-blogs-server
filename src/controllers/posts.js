@@ -1,5 +1,6 @@
 const postRouter = require("express").Router()
 const Post = require("../models/post")
+const { NotFoundError } = require("../utils/errors")
 const middleware = require("../utils/middleware")
 
 postRouter.get("/", async (request, response) => {
@@ -34,6 +35,8 @@ postRouter.post("/", middleware.userExtractor, async (request, response) => {
   response.status(201).json(populatedPost)
 })
 
+postRouter.param()
+
 postRouter.delete("/:id", async (req, res) => {
   const id = req.params.id
 
@@ -42,7 +45,7 @@ postRouter.delete("/:id", async (req, res) => {
   res.status(204).end()
 })
 
-postRouter.put("/:id", async (req, res) => {
+postRouter.put("/:id", async (req, res, next) => {
   const newPost = {
     title: req.body.title,
     author: req.body.author,
@@ -56,14 +59,12 @@ postRouter.put("/:id", async (req, res) => {
     username: true,
   })
 
-  if (!newPostResponse) {
-    res.status(404).end()
-  } else {
-    res.json(newPostResponse)
-  }
+  if (!newPostResponse) return next(new NotFoundError())
+
+  res.json(newPostResponse)
 })
 
-postRouter.post("/:id/comments", async (req, res) => {
+postRouter.post("/:id/comments", async (req, res, next) => {
   const newPostResponse = await Post.findByIdAndUpdate(
     req.params.id,
     {
@@ -76,11 +77,9 @@ postRouter.post("/:id/comments", async (req, res) => {
     username: true,
   })
 
-  if (!newPostResponse) {
-    res.status(404).end()
-  } else {
-    res.json(newPostResponse)
-  }
+  if (!newPostResponse) return next(new NotFoundError())
+
+  res.json(newPostResponse)
 })
 
 module.exports = postRouter

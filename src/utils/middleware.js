@@ -38,10 +38,11 @@ const userExtractor = async (req, res, next) => {
   next()
 }
 
-const errorHandler = (error, request, response, next) => {
+const errorResponder = (error, request, response, next) => {
   logger.error(error.message)
+  console.log(error)
 
-  response.status(error.statusCode).json({ error: error.message })
+  if (error) response.status(error.statusCode).json({ error: error.message })
 
   next(error)
 }
@@ -49,6 +50,6 @@ const errorHandler = (error, request, response, next) => {
 module.exports = {
   requestLogger,
   unknownEndpoint,
-  errorHandler,
+  errorResponder,
   userExtractor,
 }
