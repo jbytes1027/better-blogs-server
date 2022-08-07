@@ -18,7 +18,7 @@ postRouter.post("/", middleware.userExtractor, async (request, response) => {
     title: body.title,
     author: body.author,
     url: body.url,
-    likes: body.likes,
+    likes: body.likes || 0,
     user: request.userId,
     time: timeStamp.toISOString(),
     comments: [],
@@ -35,9 +35,16 @@ postRouter.post("/", middleware.userExtractor, async (request, response) => {
   response.status(201).json(populatedPost)
 })
 
-postRouter.param()
+postRouter.param("post_id", async (req, res, next, id) => {
+  const postExists = await Post.exists({ _id: id })
+  console.log(postExists)
 
-postRouter.delete("/:id", async (req, res) => {
+  if (!postExists) return next(new NotFoundError())
+
+  next()
+})
+
+postRouter.delete("/:post_id", async (req, res) => {
   const id = req.params.id
 
   await Post.findByIdAndDelete(id)
@@ -45,7 +52,7 @@ postRouter.delete("/:id", async (req, res) => {
   res.status(204).end()
 })
 
-postRouter.put("/:id", async (req, res, next) => {
+postRouter.put("/:post_id", async (req, res, next) => {
   const newPost = {
     title: req.body.title,
     author: req.body.author,
@@ -64,7 +71,7 @@ postRouter.put("/:id", async (req, res, next) => {
   res.json(newPostResponse)
 })
 
-postRouter.post("/:id/comments", async (req, res, next) => {
+postRouter.post("/:post_id/comments", async (req, res, next) => {
   const newPostResponse = await Post.findByIdAndUpdate(
     req.params.id,
     {
