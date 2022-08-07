@@ -26,6 +26,7 @@ app.use("/api/posts/", postRouter)
 app.use("/api/login", loginRouter)
 
 app.use(middleware.unknownEndpoint)
-app.use(middleware.errorHandler)
+app.use(middleware.errorResponsePicker)
+app.use(middleware.errorResponder)
 
 module.exports = app

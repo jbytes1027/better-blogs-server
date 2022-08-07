@@ -1,14 +1,7 @@
 const logger = require("./logger")
 const jwt = require("jsonwebtoken")
 const User = require("../models/user")
-
-class InvalidTokenException extends Error {
-  constructor() {
-    super()
-    this.message = "Invalid Token"
-    this.name = "InvalidTokenException"
-  }
-}
+const { AuthenticationError, RequestError } = require("./errors")
 
 const requestLogger = (request, response, next) => {
   logger.info(request.method, request.path, request.body)
@@ -23,14 +16,14 @@ const userExtractor = async (req, res, next) => {
   const authorization = req.get("authorization")
 
   if (!(authorization && authorization.toLowerCase().startsWith("bearer ")))
-    return next(new InvalidTokenException())
+    return next(new AuthenticationError("Invalid Token"))
 
   const token = authorization.substring(7)
 
   const tokenPayload = jwt.verify(token, process.env.SECRET)
 
   if (!tokenPayload || !tokenPayload.id)
-    return next(new InvalidTokenException())
+    return next(new AuthenticationError("Invalid Token"))
 
   req.userId = tokenPayload.id
   req.user = await User.findById(tokenPayload.id)
@@ -38,11 +31,18 @@ const userExtractor = async (req, res, next) => {
   next()
 }
 
-const errorResponder = (error, request, response, next) => {
-  logger.error(error.message)
-  console.log(error)
+const errorResponsePicker = (err, req, res, next) => {
+  if (err.name === "ValidationError") return next(new RequestError())
 
-  if (error) response.status(error.statusCode).json({ error: error.message })
+  next(err)
+}
+
+const errorResponder = (error, request, response, next) => {
+  if (!(error instanceof RequestError)) return next(error)
+
+  logger.error(error.message)
+
+  response.status(error.statusCode).json({ error: error.message })
 
   next(error)
 }
@@ -52,4 +52,5 @@ module.exports = {
   unknownEndpoint,
   errorResponder,
   userExtractor,
+  errorResponsePicker,
 }
