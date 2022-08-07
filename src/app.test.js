@@ -22,7 +22,6 @@ describe("end to end", () => {
       .post("/api/users")
       .send({ username: validUsername, password: validPassword })
 
-    console.log(res.body)
     expect(res.status).toBe(201)
   })
 
@@ -74,11 +73,10 @@ describe("end to end", () => {
     test("post creation", async () => {
       const res = await api
         .post("/api/posts/")
-        .set("Authentication", `bearer ${token}`)
+        .set("Authorization", `bearer ${token}`)
         .send(newPost)
 
-      console.log(res)
-      expect(res.status).toBe(204)
+      expect(res.status).toBe(201)
       expect(res.body.id).toBeDefined()
       createdPostId = res.body.id
     })
@@ -86,7 +84,7 @@ describe("end to end", () => {
     test("post creation invalid format", async () => {
       const res = await api
         .post("/api/posts/")
-        .set("Authentication", `bearer ${token}`)
+        .set("Authorization", `bearer ${token}`)
         .send({ "aljdfklsa;": "ajf" })
 
       expect(res.status).toBe(204)
