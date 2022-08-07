@@ -32,7 +32,7 @@ const userExtractor = async (req, res, next) => {
 }
 
 const errorResponsePicker = (err, req, res, next) => {
-  if (err.name === "ValidationError") return next(new RequestError())
+  if (err.name === "ValidationError") return next(new RequestError(err.message))
 
   next(err)
 }

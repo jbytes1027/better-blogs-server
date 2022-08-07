@@ -30,6 +30,7 @@ const postSchema = new mongoose.Schema({
       validator: async (u) => {
         return await User.exists({ _id: u })
       },
+      message: "not found",
     },
   },
   comments: {
