@@ -87,18 +87,16 @@ describe("end to end", () => {
         .set("Authorization", `bearer ${token}`)
         .send({ "aljdfklsa;": "ajf" })
 
-      expect(res.status).toBe(204)
-      expect(res.body.id).toBeDefined()
+      expect(res.status).toBe(400)
     })
 
-    test("post creation invalid id", async () => {
+    test("post creation invalid token", async () => {
       const res = await api
         .post("/api/posts/")
         .set("Authentication", `bearer asdfklj;a`)
-        .send({ "aljdfklsa;": "ajf" })
+        .send({})
 
-      expect(res.status).toBe(204)
-      expect(res.body.id).toBeDefined()
+      expect(res.status).toBe(401)
     })
 
     test("post fetching", async () => {
