@@ -10,7 +10,7 @@ postRouter.get("/", async (request, response) => {
   response.json(posts)
 })
 
-postRouter.post("/", middleware.userExtractor, async (request, response) => {
+postRouter.post("/", middleware.authentication, async (request, response) => {
   const body = request.body
   const timeStamp = new Date()
 
@@ -54,7 +54,7 @@ postRouter.get("/:postId", async (req, res) => {
   res.status(200).json(postResponse)
 })
 
-postRouter.delete("/:postId", async (req, res) => {
+postRouter.delete("/:postId", middleware.authentication, async (req, res) => {
   const id = req.params.postId
 
   await Post.findByIdAndDelete(id)
@@ -62,28 +62,32 @@ postRouter.delete("/:postId", async (req, res) => {
   res.status(204).end()
 })
 
-postRouter.put("/:postId", async (req, res, next) => {
-  const newPost = {
-    title: req.body.title,
-    author: req.body.author,
-    url: req.body.url,
-    likes: req.body.likes,
-  }
-
-  const newPostResponse = await Post.findByIdAndUpdate(
-    req.params.postId,
-    newPost,
-    {
-      new: true,
+postRouter.put(
+  "/:postId",
+  middleware.authentication,
+  async (req, res, next) => {
+    const newPost = {
+      title: req.body.title,
+      author: req.body.author,
+      url: req.body.url,
+      likes: req.body.likes,
     }
-  ).populate("user", {
-    username: true,
-  })
 
-  if (!newPostResponse) return next(new NotFoundError())
+    const newPostResponse = await Post.findByIdAndUpdate(
+      req.params.postId,
+      newPost,
+      {
+        new: true,
+      }
+    ).populate("user", {
+      username: true,
+    })
 
-  res.json(newPostResponse)
-})
+    if (!newPostResponse) return next(new NotFoundError())
+
+    res.json(newPostResponse)
+  }
+)
 
 postRouter.post("/:postId/comments", async (req, res, next) => {
   const newPostResponse = await Post.findByIdAndUpdate(
