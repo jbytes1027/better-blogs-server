@@ -76,9 +76,8 @@ describe("end to end", () => {
         .set("Authorization", `bearer ${token}`)
         .send(newPost)
 
-      expect(res.status).toBe(201)
-      expect(res.body.id).toBeDefined()
       createdPostId = res.body.id
+      expect(res.status).toBe(201)
     })
 
     test("post creation invalid format", async () => {
@@ -93,8 +92,8 @@ describe("end to end", () => {
     test("post creation invalid token", async () => {
       const res = await api
         .post("/api/posts/")
-        .set("Authentication", `bearer asdfklj;a`)
-        .send({})
+        .set("Authentication", `bearer asdfjkl;`)
+        .send(newPost)
 
       expect(res.status).toBe(401)
     })
@@ -103,7 +102,6 @@ describe("end to end", () => {
       const res = await api.get(`/api/posts/${createdPostId}`)
 
       expect(res.status).toBe(200)
-      expect(res.body.title).toBeDefined()
     })
 
     test("post fetching invalid id", async () => {
