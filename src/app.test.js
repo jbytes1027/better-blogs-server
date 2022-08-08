@@ -17,20 +17,43 @@ beforeAll(async () => {
 })
 
 describe("end to end", () => {
-  test("create user", async () => {
-    const res = await api
-      .post("/api/users")
-      .send({ username: validUsername, password: validPassword })
+  let userId
 
-    expect(res.status).toBe(201)
-  })
+  describe("user crud", () => {
+    test("create user", async () => {
+      const res = await api
+        .post("/api/users")
+        .send({ username: validUsername, password: validPassword })
 
-  test("create duplicate user", async () => {
-    const res = await api
-      .post("/api/users")
-      .send({ username: validUsername, password: validPassword })
+      userId = res.body.id
+      expect(res.status).toBe(201)
+    })
 
-    expect(res.status).toBe(409)
+    test("create duplicate user", async () => {
+      const res = await api
+        .post("/api/users")
+        .send({ username: validUsername, password: validPassword })
+
+      expect(res.status).toBe(409)
+    })
+
+    test("user fetch", async () => {
+      const res = await api.get(`/api/users/${userId}`)
+
+      expect(res.status).toBe(200)
+    })
+
+    test.only("user fetch invalid id", async () => {
+      const res = await api.get(`/api/users/jka3;l`)
+
+      expect(res.status).toBe(404)
+    })
+
+    test("users fetch", async () => {
+      const res = await api.get(`/api/users/`)
+
+      expect(res.status).toBe(200)
+    })
   })
 
   describe("authentication", () => {
@@ -148,7 +171,6 @@ describe("end to end", () => {
       expect(res.statusCode).toBe(200)
     })
   })
-  test.todo("user crud")
 
   afterAll(() => {
     mongoose.connection.close()
