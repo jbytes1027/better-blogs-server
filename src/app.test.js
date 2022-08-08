@@ -92,7 +92,7 @@ describe("end to end", () => {
     test("post creation invalid token", async () => {
       const res = await api
         .post("/api/posts/")
-        .set("Authentication", `bearer asdfjkl;`)
+        .set("Authorization", `bearer asdfjkl;`)
         .send(newPost)
 
       expect(res.status).toBe(401)
@@ -110,10 +110,10 @@ describe("end to end", () => {
       expect(res.status).toBe(404)
     })
 
-    test("post deletion", async () => {
+    test("post deletion invalid authentication", async () => {
       const res = await api.delete(`/api/posts/${createdPostId}`)
 
-      expect(res.status).toBe(204)
+      expect(res.status).toBe(401)
     })
 
     test("post deletion invalid id", async () => {
@@ -122,12 +122,31 @@ describe("end to end", () => {
       expect(res.status).toBe(404)
     })
 
-    test.todo("post update partial")
-    test.todo("post update wrong user")
-    test.todo("post update invalid format")
-    test.todo("post comment")
-    test.todo("post comment invalid id")
-    test.todo("post comment invalid format")
+    test.todo("post deletion invalid token")
+
+    test("post update", async () => {
+      const update = {
+        title: "updated title",
+      }
+
+      const updated = await api
+        .put(`/api/posts/${createdPostId}`)
+        .set("Authorization", `bearer ${token}`)
+        .send(update)
+
+      expect(updated.body.title).toBe("updated title")
+    })
+
+    test("post comment", async () => {
+      const comment = { message: "comment test" }
+
+      const res = await api
+        .post(`/api/posts/${createdPostId}/comments`)
+        .set("Authorization", `bearer ${token}`)
+        .send(comment)
+
+      expect(res.statusCode).toBe(200)
+    })
   })
   test.todo("user crud")
 

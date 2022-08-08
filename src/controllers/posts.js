@@ -66,16 +66,9 @@ postRouter.put(
   "/:postId",
   middleware.authentication,
   async (req, res, next) => {
-    const newPost = {
-      title: req.body.title,
-      author: req.body.author,
-      url: req.body.url,
-      likes: req.body.likes,
-    }
-
     const newPostResponse = await Post.findByIdAndUpdate(
       req.params.postId,
-      newPost,
+      req.body,
       {
         new: true,
       }
