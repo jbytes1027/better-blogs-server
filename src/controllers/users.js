@@ -1,10 +1,25 @@
 const bcrypt = require("bcrypt")
 const userRouter = require("express").Router()
 const User = require("../models/user")
-const { DuplicateResourceError, RequestError } = require("../utils/errors")
+const {
+  DuplicateResourceError,
+  RequestError,
+  NotFoundError,
+} = require("../utils/errors")
 
-userRouter.get("/:id", async (req, res) => {
-  const user = await User.findById(req.params.id).populate("posts", {
+userRouter.param("userId", async (req, res, next, id) => {
+  try {
+    const postExists = await User.exists({ _id: id })
+    if (!postExists) return next(new NotFoundError())
+  } catch (e) {
+    if (e.name === "CastError") return next(new NotFoundError())
+  }
+
+  next()
+})
+
+userRouter.get("/:userId", async (req, res) => {
+  const user = await User.findById(req.params.userId).populate("posts", {
     title: true,
     author: true,
     url: true,
