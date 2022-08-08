@@ -35,24 +35,34 @@ postRouter.post("/", middleware.userExtractor, async (request, response) => {
   response.status(201).json(populatedPost)
 })
 
-postRouter.param("post_id", async (req, res, next, id) => {
-  const postExists = await Post.exists({ _id: id })
-  console.log(postExists)
-
-  if (!postExists) return next(new NotFoundError())
+postRouter.param("postId", async (req, res, next, id) => {
+  try {
+    const postExists = await Post.exists({ _id: id })
+    if (!postExists) return next(new NotFoundError())
+  } catch (e) {
+    if (e.name === "CastError") return next(new NotFoundError())
+  }
 
   next()
 })
 
-postRouter.delete("/:post_id", async (req, res) => {
-  const id = req.params.id
+postRouter.get("/:postId", async (req, res) => {
+  const postResponse = await Post.findById(req.params.postId).populate("user", {
+    username: true,
+  })
+
+  res.status(200).json(postResponse)
+})
+
+postRouter.delete("/:postId", async (req, res) => {
+  const id = req.params.postId
 
   await Post.findByIdAndDelete(id)
 
   res.status(204).end()
 })
 
-postRouter.put("/:post_id", async (req, res, next) => {
+postRouter.put("/:postId", async (req, res, next) => {
   const newPost = {
     title: req.body.title,
     author: req.body.author,
@@ -60,9 +70,13 @@ postRouter.put("/:post_id", async (req, res, next) => {
     likes: req.body.likes,
   }
 
-  const newPostResponse = await Post.findByIdAndUpdate(req.params.id, newPost, {
-    new: true,
-  }).populate("user", {
+  const newPostResponse = await Post.findByIdAndUpdate(
+    req.params.postId,
+    newPost,
+    {
+      new: true,
+    }
+  ).populate("user", {
     username: true,
   })
 
@@ -71,9 +85,9 @@ postRouter.put("/:post_id", async (req, res, next) => {
   res.json(newPostResponse)
 })
 
-postRouter.post("/:post_id/comments", async (req, res, next) => {
+postRouter.post("/:postId/comments", async (req, res, next) => {
   const newPostResponse = await Post.findByIdAndUpdate(
-    req.params.id,
+    req.params.postId,
     {
       $push: { comments: req.body.message },
     },
