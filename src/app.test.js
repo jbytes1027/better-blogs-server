@@ -133,20 +133,6 @@ describe("end to end", () => {
       expect(res.status).toBe(404)
     })
 
-    test("post deletion invalid authentication", async () => {
-      const res = await api.delete(`/api/posts/${createdPostId}`)
-
-      expect(res.status).toBe(401)
-    })
-
-    test("post deletion invalid id", async () => {
-      const res = await api.delete(`/api/posts/kjla;s`)
-
-      expect(res.status).toBe(404)
-    })
-
-    test.todo("post deletion invalid token")
-
     test("post update", async () => {
       const update = {
         title: "updated title",
@@ -169,6 +155,26 @@ describe("end to end", () => {
         .send(comment)
 
       expect(res.statusCode).toBe(200)
+    })
+
+    test("post deletion invalid authentication", async () => {
+      const res = await api.delete(`/api/posts/${createdPostId}`)
+
+      expect(res.status).toBe(401)
+    })
+
+    test("post deletion", async () => {
+      const res = await api
+        .delete(`/api/posts/${createdPostId}`)
+        .set("Authorization", `bearer ${token}`)
+
+      expect(res.status).toBe(204)
+    })
+
+    test("post deletion invalid id", async () => {
+      const res = await api.delete(`/api/posts/kjla;s`)
+
+      expect(res.status).toBe(404)
     })
   })
 
