@@ -43,7 +43,7 @@ describe("end to end", () => {
       expect(res.status).toBe(200)
     })
 
-    test.only("user fetch invalid id", async () => {
+    test("user fetch invalid id", async () => {
       const res = await api.get(`/api/users/jka3;l`)
 
       expect(res.status).toBe(404)
