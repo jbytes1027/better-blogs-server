@@ -1,0 +1,31 @@
+name: lint-and-test
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: npm ci
+        run: npm ci
+      - name: lint
+        run: npm run lint
+      - name: test
+        env:
+          MONGODB_URI_TEST: ${{ secrets.MONGODB_URI_TEST }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        run: |
+          npm test

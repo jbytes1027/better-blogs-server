@@ -4,6 +4,7 @@ const supertest = require("supertest")
 const app = require("./app")
 const User = require("./models/user")
 const Post = require("./models/post")
+const { JWT_SECRET } = require("./utils/config")
 
 const api = supertest(app)
 
@@ -14,7 +15,7 @@ let token
 beforeAll(async () => {
   await User.deleteMany({})
   await Post.deleteMany({})
-})
+}, 10000)
 
 describe("end to end", () => {
   let userId
@@ -62,8 +63,7 @@ describe("end to end", () => {
         .post("/api/login")
         .send({ username: validUsername, password: validPassword })
 
-      expect(res.status).toBe(200)
-      expect(jwt.verify(res.body.token, process.env.SECRET)).toBeDefined()
+      expect(jwt.verify(res.body.token, JWT_SECRET)).toBeDefined()
       token = res.body.token
     })
 
