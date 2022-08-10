@@ -11,6 +11,8 @@ const config = require("./utils/config")
 
 const app = express()
 
+console.log(process.env.MONGODB_URI_TEST)
+console.log(process.env.JWT_SECRET)
 logger.info("Connecting to", config.MONGODB_URI)
 mongoose
   .connect(config.MONGODB_URI)
