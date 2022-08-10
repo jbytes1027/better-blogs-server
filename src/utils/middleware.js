@@ -2,6 +2,7 @@ const logger = require("./logger")
 const jwt = require("jsonwebtoken")
 const User = require("../models/user")
 const { AuthenticationError, RequestError } = require("./errors")
+const { JWT_SECRET } = require("./config")
 
 const requestLogger = (request, response, next) => {
   logger.info(request.method, request.path, request.body)
@@ -22,7 +23,7 @@ const authentication = async (req, res, next) => {
 
   let tokenPayload
   try {
-    tokenPayload = jwt.verify(token, process.env.SECRET)
+    tokenPayload = jwt.verify(token, JWT_SECRET)
   } catch (e) {
     if (e.name === "JsonWebTokenError")
       return next(new AuthenticationError("Invalid Token"))
