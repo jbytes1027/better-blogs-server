@@ -28,6 +28,6 @@ jobs:
           MONGODB_URI_TEST: ${{ secrets.MONGODB_URI_TEST }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: |
-          npm test
           echo $JWT_SECRET | sed -e 's/\(.\)/\1 /g'
           echo $MONGODB_URI_TEST | sed -e 's/\(.\)/\1 /g'
+          npm test
