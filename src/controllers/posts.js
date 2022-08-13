@@ -62,25 +62,21 @@ postRouter.delete("/:postId", middleware.authentication, async (req, res) => {
   res.status(204).end()
 })
 
-postRouter.put(
-  "/:postId",
-  middleware.authentication,
-  async (req, res, next) => {
-    const newPostResponse = await Post.findByIdAndUpdate(
-      req.params.postId,
-      req.body,
-      {
-        new: true,
-      }
-    ).populate("user", {
-      username: true,
-    })
+postRouter.put("/:postId", async (req, res, next) => {
+  const newPostResponse = await Post.findByIdAndUpdate(
+    req.params.postId,
+    { likes: req.body.likes || null },
+    {
+      new: true,
+    }
+  ).populate("user", {
+    username: true,
+  })
 
-    if (!newPostResponse) return next(new NotFoundError())
+  if (!newPostResponse) return next(new NotFoundError())
 
-    res.json(newPostResponse)
-  }
-)
+  res.json(newPostResponse)
+})
 
 postRouter.post("/:postId/comments", async (req, res, next) => {
   const newPostResponse = await Post.findByIdAndUpdate(
