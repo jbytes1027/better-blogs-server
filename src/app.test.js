@@ -135,7 +135,7 @@ describe("end to end", () => {
 
     test("post update", async () => {
       const update = {
-        title: "updated title",
+        likes: 1,
       }
 
       const updated = await api
@@ -143,7 +143,7 @@ describe("end to end", () => {
         .set("Authorization", `bearer ${token}`)
         .send(update)
 
-      expect(updated.body.title).toBe("updated title")
+      expect(updated.body.likes).toBe(1)
     })
 
     test("post comment", async () => {
