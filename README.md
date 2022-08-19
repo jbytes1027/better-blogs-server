@@ -4,8 +4,8 @@ The backend for Better Blogs, a reddit-like sharing platform for blog posts. Bui
 
 ## Tech Stack
 
-- [node.js](https://github.com/nodejs/node) for a JavaScript runtime
-- [express.js](https://github.com/expressjs/express) for a web framework
+- [Node.js](https://github.com/nodejs/node) for a JavaScript runtime
+- [Express.js](https://github.com/expressjs/express) for a web framework
 - [Jest](https://github.com/facebook/jest) for a testing framework
 - JSON Web Tokens via [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken) for authentication
 - MongoDB via [mongoose](https://github.com/Automattic/mongoose) for data storage
