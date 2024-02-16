@@ -1,6 +1,6 @@
 # Better Blogs Server
 
-The backend for Better Blogs, a reddit-like sharing platform for blog posts. Built to learn modern full stack development.
+The backend for Better Blogs, a reddit-like sharing platform for blog posts. Built to learn modern full stack development. The client is [here](https://github.com/jbytes1027/better-blogs-client).
 
 ## Tech Stack
 
